@@ -1,0 +1,24 @@
+services:
+  -
+    host: discovery1.dev.brinkus.com
+    port: 8761
+  -
+    host: discovery2.dev.brinkus.com
+    port: 8762
+
+registration:
+  name: neo4j
+  vipAddress: neo4j
+  hostname: neo4j.dev.brinkus.com
+  ipAddress: 127.0.0.1
+  awsDnsHostname: true
+  port:
+    port: 7474
+    enabled: true
+  securePort:
+    port: 7473
+    enabled: false
+  statusPageUrl: http://neo4j.dev.brinkus.com:7474/browser
+  healthCheckUrl: http://neo4j.dev.brinkus.com:7474/eureka/health
+  homePageUrl: http://neo4j.dev.brinkus.com:7474/
+

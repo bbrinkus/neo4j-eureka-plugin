@@ -5,8 +5,14 @@ package com.brinkus.neo4j.eureka.type.config;
  */
 public class Service {
 
+    /**
+     * The service's fully qualified hostname or ip address.
+     */
     private String host;
 
+    /**
+     * The service's port number.
+     */
     private int port;
 
     public String getHost() {

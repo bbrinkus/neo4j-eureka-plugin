@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,7 +41,8 @@ public class ConfigurationLoaderTest {
 
     @Test
     public void loadConfiguration() throws Throwable {
-        Configuration configuration = loader.loadConfiguration("conf/neo4j-eureka.yaml");
+        URL url = Thread.currentThread().getContextClassLoader().getResource("neo4j-eureka-services.yaml");
+        Configuration configuration = loader.loadConfiguration(url.getPath());
 
         List<Service> services = configuration.getServices();
         assertThat(services.size(), is(2));
@@ -53,6 +55,8 @@ public class ConfigurationLoaderTest {
         assertThat(registration, notNullValue());
         assertThat(registration.getName(), is("neo4j"));
         assertThat(registration.getHostname(), is("neo4j.dev.brinkus.com"));
+        assertThat(registration.getIpAddress(), is("127.0.0.1"));
+        assertThat(registration.useAwsDnsHostname(), is(true));
         assertThat(registration.getVipAddress(), is("neo4j"));
         assertThat(registration.getPort().getPort(), is(7474));
         assertThat(registration.getPort().isEnabled(), is(true));

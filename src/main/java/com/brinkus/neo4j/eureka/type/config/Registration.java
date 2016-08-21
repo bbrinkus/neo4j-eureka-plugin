@@ -1,24 +1,58 @@
 package com.brinkus.neo4j.eureka.type.config;
 
 /**
- * The registration information.
+ * The registration information for the discovery service.
  */
 public class Registration {
 
+    /**
+     * The fully qualified hostname.
+     */
     private String hostname;
 
+    /**
+     * The instance's ip address.
+     */
+    private String ipAddress;
+
+    /**
+     * Use the fully qualified hostname instead of the aws hostname.
+     */
+    private boolean awsDnsHostname;
+
+    /**
+     * The application's name of the instance.
+     */
     private String name;
 
+    /**
+     * The instance's Virtual Internet Protocol address.
+     */
     private String vipAddress;
 
+    /**
+     * The instance's unsecure port.
+     */
     private RegistrationPort port;
 
+    /**
+     * The instance's secure port.
+     */
     private RegistrationPort securePort;
 
+    /**
+     * The instance's status page url.
+     */
     private String statusPageUrl;
 
+    /**
+     * The instance's health check url.
+     */
     private String healthCheckUrl;
 
+    /**
+     * The instance's start page url.
+     */
     private String homePageUrl;
 
     public String getHostname() {
@@ -27,6 +61,28 @@ public class Registration {
 
     public void setHostname(final String hostname) {
         this.hostname = hostname;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public Registration setIpAddress(final String ipAddress) {
+        this.ipAddress = ipAddress;
+        return this;
+    }
+
+    public boolean isAwsDnsHostname() {
+        return awsDnsHostname;
+    }
+
+    public boolean useAwsDnsHostname() {
+        return awsDnsHostname;
+    }
+
+    public Registration setAwsDnsHostname(final boolean awsDnsHostname) {
+        this.awsDnsHostname = awsDnsHostname;
+        return this;
     }
 
     public String getName() {

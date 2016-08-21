@@ -1,29 +1,21 @@
-# List of the service discovery servers host and port information
 services:
   -
     host: localhost
     port: 18761
 
-# Registration information used in discovery service
 registration:
-  # Application's name
   name: neo4j
-  # Virtual Internet Protocol address
   vipAddress: neo4j
-  # Fully qualifed hostname of the instance
   hostname: localhost
-  # IP address of the instance
   ipAddress: 127.0.0.1
-  # With AWS use the DNS resolvation name
   awsDnsHostname: true
-  # The unsecure port
   port:
     port: 7474
     enabled: true
-  # The secure port
   securePort:
     port: 7473
     enabled: false
   statusPageUrl: http://localhost:7474/browser
   healthCheckUrl: http://localhost:7474/eureka/health
   homePageUrl: http://localhost:7474/
+

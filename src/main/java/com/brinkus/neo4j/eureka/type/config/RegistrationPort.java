@@ -1,12 +1,18 @@
 package com.brinkus.neo4j.eureka.type.config;
 
 /**
- * The used port and state for the registration.
+ * The the Neo4j application's used port and it's state.
  */
 public class RegistrationPort {
 
+    /**
+     * The port number.
+     */
     private int port;
 
+    /**
+     * True if the port is enabled.
+     */
     private boolean enabled;
 
     public int getPort() {

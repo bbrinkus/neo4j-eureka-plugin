@@ -7,8 +7,14 @@ import java.util.List;
  */
 public class Configuration {
 
+    /**
+     * The list of the discovery services.
+     */
     private List<Service> services;
 
+    /**
+     * The registration information for the discovery service.
+     */
     private Registration registration;
 
     public List<Service> getServices() {
