@@ -25,7 +25,8 @@ public class HealthCheckResourceIT {
             HTTP.Response response = HTTP.GET(server.httpURI().resolve("eureka/health").toString());
 
             assertThat(response.status(), is(200));
-            assertThat(response.rawContent(), is("{\"code\":\"UP\",\"description\":\"Neo4j health check was success.\"}"));
+            assertThat(response.stringFromContent("code"), is("UP"));
+            assertThat(response.stringFromContent("description"), is("Neo4j health check was success."));
         }
     }
 
@@ -38,7 +39,8 @@ public class HealthCheckResourceIT {
             HTTP.Response response = HTTP.GET(server.httpURI().resolve("eureka/health").toString());
 
             assertThat(response.status(), is(200));
-            assertThat(response.rawContent(), is("{\"code\":\"DOWN\",\"description\":\"Neo4j health check result was invalid!\"}"));
+            assertThat(response.stringFromContent("code"), is("DOWN"));
+            assertThat(response.stringFromContent("description"), is("Neo4j health check result was invalid!"));
         }
     }
 
