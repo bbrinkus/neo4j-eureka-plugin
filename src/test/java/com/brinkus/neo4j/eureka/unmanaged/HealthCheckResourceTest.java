@@ -1,6 +1,6 @@
 package com.brinkus.neo4j.eureka.unmanaged;
 
-import com.brinkus.neo4j.eureka.type.eureka.HealthCheck;
+import com.brinkus.neo4j.eureka.type.HealthCheck;
 import org.junit.Before;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;

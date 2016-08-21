@@ -1,6 +1,6 @@
 package com.brinkus.neo4j.eureka.unmanaged;
 
-import com.brinkus.neo4j.eureka.type.eureka.HealthCheck;
+import com.brinkus.neo4j.eureka.type.HealthCheck;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.neo4j.graphdb.GraphDatabaseService;
