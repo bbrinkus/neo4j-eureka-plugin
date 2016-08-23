@@ -8,7 +8,7 @@ registration:
   vipAddress: neo4j
   hostname: localhost
   ipAddress: 127.0.0.1
-  awsDnsHostname: true
+  awsDnsHostname: false
   port:
     port: 7474
     enabled: true
