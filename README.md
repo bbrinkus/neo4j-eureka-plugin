@@ -1,5 +1,7 @@
 # Neo4j Eureka Plugin
 
+**Development in progress!**
+
 ## Configuration
 
 NEO4J_HOME/conf/neo4j-server.properties

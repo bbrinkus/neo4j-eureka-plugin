@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Date;
 import java.util.HashMap;
 
 public class InstanceInfoFactory {
@@ -73,7 +72,9 @@ public class InstanceInfoFactory {
             LOGGER.info("Eureka instance hostname: {}", hostname);
         }
 
-        final long timestamp = new Date().getTime();
+        final long timestamp = System.currentTimeMillis();
+
+        // e.g.: i-0f84ec0b4c02e7878:neo4j:7474
         final String fullInstanceId = String.format("%s:%s:%d", instanceId, registration.getName(), registration.getPort().getPort()).toLowerCase();
 
         final LeaseInfo leaseInfo = LeaseInfo.Builder
