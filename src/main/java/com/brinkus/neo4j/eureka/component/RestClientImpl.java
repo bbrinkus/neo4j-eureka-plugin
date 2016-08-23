@@ -156,13 +156,17 @@ public class RestClientImpl implements RestClient {
             throw new RequestFailedException(message, e);
         }
         if (response.getStatusLine().getStatusCode() != httpStatus) {
-            String message = String.format("The response status code %s is not matchined with the expected %s!", response.getStatusLine().getStatusCode(), host);
+            String message = String.format("The response status code %s is not matching with the expected %s!", response.getStatusLine().getStatusCode(), host);
             LOGGER.warn(message);
             throw new ResponseCodeNotMatchingException(message);
         }
 
         try {
-            return EntityUtils.toString(response.getEntity());
+            if (response.getStatusLine().getStatusCode() == STATUS_OK) {
+                return EntityUtils.toString(response.getEntity());
+            } else {
+                return "";
+            }
         } catch (IOException e) {
             String message = "An error occurred during the response process!";
             LOGGER.error(message, e);
