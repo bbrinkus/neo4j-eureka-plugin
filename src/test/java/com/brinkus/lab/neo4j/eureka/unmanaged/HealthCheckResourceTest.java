@@ -1,6 +1,7 @@
 package com.brinkus.lab.neo4j.eureka.unmanaged;
 
-import com.brinkus.lab.neo4j.eureka.type.HealthCheck;
+import com.brinkus.lab.neo4j.eureka.type.health.HealthCheck;
+import com.brinkus.lab.neo4j.eureka.type.health.HealthStatusCode;
 import org.junit.Before;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -36,7 +37,7 @@ public class HealthCheckResourceTest {
         when(service.execute(anyString())).thenReturn(result);
 
         HealthCheck healthCheck = healthCheckResource.healthCheck();
-        assertThat(healthCheck.getCode(), is("UP"));
+        assertThat(healthCheck.getCode(), is(HealthStatusCode.UP));
         assertThat(healthCheck.getDescription(), is("Neo4j health check was success."));
     }
 
@@ -47,7 +48,7 @@ public class HealthCheckResourceTest {
         when(service.execute(anyString())).thenReturn(result);
 
         HealthCheck healthCheck = healthCheckResource.healthCheck();
-        assertThat(healthCheck.getCode(), is("DOWN"));
+        assertThat(healthCheck.getCode(), is(HealthStatusCode.DOWN));
         assertThat(healthCheck.getDescription(), is("Neo4j health check result was invalid!"));
     }
 
@@ -56,7 +57,7 @@ public class HealthCheckResourceTest {
         when(service.execute(anyString())).thenThrow(Exception.class);
 
         HealthCheck healthCheck = healthCheckResource.healthCheck();
-        assertThat(healthCheck.getCode(), is("DOWN"));
+        assertThat(healthCheck.getCode(), is(HealthStatusCode.DOWN));
         assertThat(healthCheck.getDescription(), is("Neo4j health check failed!"));
     }
 

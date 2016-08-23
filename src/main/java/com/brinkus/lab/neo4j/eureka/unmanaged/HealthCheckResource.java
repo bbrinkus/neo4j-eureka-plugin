@@ -1,6 +1,7 @@
 package com.brinkus.lab.neo4j.eureka.unmanaged;
 
-import com.brinkus.lab.neo4j.eureka.type.HealthCheck;
+import com.brinkus.lab.neo4j.eureka.type.health.HealthCheck;
+import com.brinkus.lab.neo4j.eureka.type.health.HealthStatusCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -37,12 +38,12 @@ public class HealthCheckResource {
     public HealthCheck healthCheck() {
         try {
             if (check()) {
-                return new HealthCheck("UP", "Neo4j health check was success.");
+                return new HealthCheck(HealthStatusCode.UP, "Neo4j health check was success.");
             } else {
-                return new HealthCheck("DOWN", "Neo4j health check result was invalid!");
+                return new HealthCheck(HealthStatusCode.DOWN, "Neo4j health check result was invalid!");
             }
         } catch (Exception e) {
-            return new HealthCheck("DOWN", "Neo4j health check failed!");
+            return new HealthCheck(HealthStatusCode.DOWN, "Neo4j health check failed!");
         }
     }
 
