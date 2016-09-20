@@ -159,7 +159,7 @@ public class LifecycleService {
      *         an error occurred during the HTTP communication
      */
     public void keepAlive() throws RestClientException {
-        log.info("Keeping application status alive (%s)", restClient.getHost());
+        log.debug("Keeping application status alive (%s)", restClient.getHost());
 
         String uri = String.format(INSTANCE_URI, registration.getName(), instanceInfo.getInstanceId());
         restClient.put(uri);
