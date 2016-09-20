@@ -175,6 +175,14 @@ public class LifecycleService {
     public void deregister() throws RestClientException {
         log.info("De-registering application instance (%s)", restClient.getHost());
 
+        try {
+            // sleep 1 sec before the de-registration
+            // otherwise it can happen that it will stay in the DS queue due to the keep alive request
+            // TODO investigate further
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            log.error("An error occurred during the de-registration delay process");
+        }
         String uri = String.format(INSTANCE_URI, registration.getName(), instanceInfo.getInstanceId());
         restClient.delete(uri);
 
@@ -182,9 +190,11 @@ public class LifecycleService {
     }
 
     private void updateStatus(LifecycleStatus status) {
-        if (this.status != status) {
-            this.status = status;
+        if (this.status == status) {
+            return;
         }
+        log.info("Update status from %s to %s", this.status, status);
+        this.status = status;
     }
 
 }

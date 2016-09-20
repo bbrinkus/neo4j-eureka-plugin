@@ -163,6 +163,7 @@ public class RestClient {
     }
 
     private String sendRequests(HttpUriRequest request, int httpStatus) throws RestClientException {
+        log.debug("Sending %s request to %s", request.getMethod(), request.getURI());
         HttpResponse response;
         try {
             response = httpClient.execute(request);
