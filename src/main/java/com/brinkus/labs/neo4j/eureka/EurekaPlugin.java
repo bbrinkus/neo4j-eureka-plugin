@@ -68,8 +68,18 @@ public class EurekaPlugin extends ServerPlugin {
         final Configuration configuration = loadConfiguration(pluginConfiguration.getConfigurationFilePath());
 
         List<RestClient> serviceClients = initializeServiceClients(configuration);
-        initializeShutdownHook(configuration, serviceClients);
-        startStatusHandlers(serviceClients, configuration, pluginConfiguration.getAmazonInfo());
+        startLifecycles(serviceClients, configuration, pluginConfiguration.getAmazonInfo());
+    }
+
+    private Configuration loadConfiguration(final String configurationFilePath) {
+        try {
+            log.info("Reading configuration settings.");
+            ConfigurationLoader configurationLoader = new ConfigurationLoader();
+            return configurationLoader.loadConfiguration(configurationFilePath);
+        } catch (EurekaPluginException e) {
+            log.error("An error occurred the properties reading process!");
+            throw new EurekaPluginFatalException(e);
+        }
     }
 
     private List<RestClient> initializeServiceClients(final Configuration configuration) {
@@ -84,49 +94,30 @@ public class EurekaPlugin extends ServerPlugin {
         return clients;
     }
 
-    public Configuration loadConfiguration(final String configurationFilePath) {
-        try {
-            log.info("Reading configuration settings.");
-            ConfigurationLoader configurationLoader = new ConfigurationLoader();
-            return configurationLoader.loadConfiguration(configurationFilePath);
-        } catch (EurekaPluginException e) {
-            log.error("An error occurred the properties reading process!");
-            throw new EurekaPluginFatalException(e);
-        }
-    }
-
-    private void initializeShutdownHook(
+    private void startLifecycles(
+            final List<RestClient> serviceClients,
             final Configuration configuration,
-            final List<RestClient> serviceClients
+            final AmazonInfo amazonInfo
     ) {
         for (RestClient client : serviceClients) {
-            log.info(String.format("Registering new shutdown hook for %s", client.getHost()));
-            final ShutdownHook hook = new ShutdownHook.Builder()
+            final LifecycleService lifecycleService = new LifecycleService.Builder()
                     .withRegistration(configuration.getRegistration())
                     .withRestClient(client)
+                    .withAwsInfo(amazonInfo)
                     .build();
 
+            log.info(String.format("Registering new shutdown hook for %s", client.getHost()));
+            final ShutdownHook hook = new ShutdownHook.Builder()
+                    .withLifecycleService(lifecycleService)
+                    .build();
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {
                     hook.execute();
                 }
             });
-        }
-    }
 
-    private void startStatusHandlers(
-            final List<RestClient> serviceClients,
-            final Configuration configuration,
-            final AmazonInfo amazonInfo
-    ) {
-        for (RestClient client : serviceClients) {
             log.info(String.format("Starting lifecycle service for %s", client.getHost()));
-            final LifecycleService lifecycleService = new LifecycleService.Builder()
-                    .withRegistration(configuration.getRegistration())
-                    .withRestClient(client)
-                    .withAwsInfo(amazonInfo)
-                    .build();
             new Thread(new LifecycleServiceRunnable(lifecycleService)).start();
         }
     }

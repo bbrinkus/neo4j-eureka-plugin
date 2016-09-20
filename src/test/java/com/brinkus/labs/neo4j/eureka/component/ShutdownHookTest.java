@@ -20,6 +20,8 @@ package com.brinkus.labs.neo4j.eureka.component;
 
 import com.brinkus.labs.neo4j.eureka.exception.ResponseCodeNotMatchingException;
 import com.brinkus.labs.neo4j.eureka.type.config.Registration;
+import com.brinkus.labs.neo4j.eureka.type.config.RegistrationPort;
+import com.netflix.appinfo.AmazonInfo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,14 +40,28 @@ public class ShutdownHookTest {
 
     @Before
     public void before() {
+        RegistrationPort port = new RegistrationPort();
+        port.setPort(8888);
+        port.setEnabled(true);
+
         Registration registration = new Registration();
         registration.setName("test");
-        registration.setName("test.host.com");
+        registration.setHostname("test.host.com");
+        registration.setPort(port);
+        registration.setSecurePort(new RegistrationPort());
 
         restClient = mock(RestClient.class);
-        shutdownHook = new ShutdownHook.Builder()
-                .withRestClient(restClient)
+
+        LifecycleService lifecycleService = new LifecycleService.Builder()
                 .withRegistration(registration)
+                .withRestClient(restClient)
+                .withAwsInfo(new AmazonInfo())
+                .build();
+
+        lifecycleService.createInstanceInfo();
+
+        shutdownHook = new ShutdownHook.Builder()
+                .withLifecycleService(lifecycleService)
                 .build();
     }
 
@@ -57,21 +73,12 @@ public class ShutdownHookTest {
 
     @Test(expected = NullPointerException.class)
     public void buildWithoutRegistration() {
-        new ShutdownHook.Builder()
-                .withRestClient(restClient)
-                .build();
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void buildWithoutRestClient() {
-        new ShutdownHook.Builder()
-                .withRegistration(new Registration())
-                .build();
+        new ShutdownHook.Builder().build();
     }
 
     @Test
     public void shutdownSuccess() throws Exception {
-        when(restClient.delete(eq("/eureka/apps/test/test.host.com"))).thenReturn("");
+        when(restClient.delete(eq("/eureka/apps/test/test:test:8888"))).thenReturn("");
 
         boolean result = shutdownHook.execute();
         assertThat(result, is(true));
@@ -79,10 +86,10 @@ public class ShutdownHookTest {
 
     @Test
     public void shutdownFailed() throws Exception {
-        when(restClient.delete(eq("/eureka/apps/test/test.host.com"))).thenThrow(ResponseCodeNotMatchingException.class);
+        when(restClient.delete(eq("/eureka/apps/test/test:test:8888"))).thenThrow(ResponseCodeNotMatchingException.class);
 
         boolean result = shutdownHook.execute();
-        assertThat(result, is(true));
+        assertThat(result, is(false));
     }
 
 }

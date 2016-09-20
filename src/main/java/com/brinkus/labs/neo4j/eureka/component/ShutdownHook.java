@@ -18,8 +18,7 @@
 
 package com.brinkus.labs.neo4j.eureka.component;
 
-import com.brinkus.labs.neo4j.eureka.exception.RestClientException;
-import com.brinkus.labs.neo4j.eureka.type.config.Registration;
+import com.brinkus.labs.neo4j.eureka.exception.EurekaPluginException;
 import org.apache.commons.lang3.Validate;
 import org.neo4j.logging.FormattedLog;
 import org.neo4j.logging.Log;
@@ -34,33 +33,18 @@ public class ShutdownHook {
      */
     public static final class Builder {
 
-        private Registration registration;
-
-        private RestClient restClient;
+        private LifecycleService lifecycleService;
 
         /**
-         * Set the registration object.
+         * Set the lifecycle service.
          *
-         * @param registration
-         *         the {@link Registration} instance
+         * @param lifecycleService
+         *         the {@link LifecycleService} instance
          *
-         * @return the builder object
+         * @return the builder object.
          */
-        public Builder withRegistration(final Registration registration) {
-            this.registration = registration;
-            return this;
-        }
-
-        /**
-         * Set the rest client.
-         *
-         * @param restClient
-         *         the {@link RestClient} instance
-         *
-         * @return the builder object
-         */
-        public Builder withRestClient(final RestClient restClient) {
-            this.restClient = restClient;
+        public Builder withLifecycleService(final LifecycleService lifecycleService) {
+            this.lifecycleService = lifecycleService;
             return this;
         }
 
@@ -71,35 +55,29 @@ public class ShutdownHook {
          */
         public ShutdownHook build() {
             validateRequiredFields();
-            return new ShutdownHook(registration, restClient);
+            return new ShutdownHook(lifecycleService);
         }
 
         /**
          * Check that the required fields are there.
          */
         private void validateRequiredFields() {
-            Validate.notNull(registration);
-            Validate.notNull(restClient);
+            Validate.notNull(lifecycleService);
         }
     }
 
     private final Log log = FormattedLog.toOutputStream(System.out);
 
-    private final Registration registration;
-
-    private final RestClient restClient;
+    private final LifecycleService lifecycleService;
 
     /**
      * Create a new instance of {@link ShutdownHook}
      *
-     * @param registration
-     *         the discovery service registration information
-     * @param restClient
-     *         the rest client
+     * @param lifecycleService
+     *         the lifecycle service instance
      */
-    ShutdownHook(Registration registration, RestClient restClient) {
-        this.registration = registration;
-        this.restClient = restClient;
+    ShutdownHook(final LifecycleService lifecycleService) {
+        this.lifecycleService = lifecycleService;
     }
 
     /**
@@ -108,20 +86,14 @@ public class ShutdownHook {
      * @return true if the process was success.
      */
     public boolean execute() {
-        log.info("Shutting down service");
-        String uri = getUri();
         try {
-            restClient.delete(uri, RestClient.STATUS_OK);
+            lifecycleService.deregister();
             return true;
-        } catch (RestClientException e) {
+        } catch (EurekaPluginException e) {
             // just log the exception because were are already shutting down
-            log.warn("An error occurred during the request", e);
+            log.warn("An error occurred during the de-registration process!", e);
             return false;
         }
-    }
-
-    private String getUri() {
-        return String.format("/eureka/apps/%s/%s", registration.getName(), registration.getHostname());
     }
 
 }
