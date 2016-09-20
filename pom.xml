@@ -4,9 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>com.brinkus.labs</groupId>
+        <artifactId>labs-parent</artifactId>
+        <version>1.1.0</version>
+    </parent>
+
     <groupId>com.brinkus.labs</groupId>
     <artifactId>neo4j-eureka-plugin</artifactId>
-    <version>1.0.0.SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>Neo4j Eureka Plugin</name>
     <description>Netflix Eureka Client Plugin for Neo4j</description>
@@ -14,12 +20,10 @@
 
     <properties>
         <!-- Build plugins versions -->
-        <maven-assembly-plugin.version>2.6</maven-assembly-plugin.version>
-        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <docs-maven-plugin.version>5</docs-maven-plugin.version>
 
         <!-- Dependencies versions -->
-        <neo4j.version>2.3.2</neo4j.version>
+        <neo4j.version>3.0.4</neo4j.version>
         <slf4j.version>1.7.21</slf4j.version>
         <httpclient.version>4.5.2</httpclient.version>
         <jackson.version>2.7.4</jackson.version>
@@ -27,11 +31,6 @@
         <hamcrest.version>1.3</hamcrest.version>
         <mockito.version>1.10.19</mockito.version>
         <lang3.version>3.3.2</lang3.version>
-
-        <!-- system properties -->
-        <java.version>1.7</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <build>
@@ -49,7 +48,7 @@
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
             </testResource>
         </testResources>
 
@@ -58,7 +57,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven-assembly-plugin.version}</version>
                 <configuration>
                     <finalName>neo4j-eureka</finalName>
                     <descriptorRefs>
@@ -74,17 +72,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <inherited>true</inherited>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -104,6 +91,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.esotericsoftware.yamlbeans</groupId>
+            <artifactId>yamlbeans</artifactId>
+            <version>1.09</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
@@ -116,15 +109,21 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
+            <groupId>com.esotericsoftware.yamlbeans</groupId>
+            <artifactId>yamlbeans</artifactId>
+            <version>1.09</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
         </dependency>
 
         <dependency>
@@ -135,22 +134,12 @@
         </dependency>
 
         <dependency>
-            <groupId>com.netflix.eureka</groupId>
-            <artifactId>eureka-client</artifactId>
-            <version>1.4.11</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.esotericsoftware.yamlbeans</groupId>
-            <artifactId>yamlbeans</artifactId>
-            <version>1.09</version>
-        </dependency>
+        <!-- Test dependencies -->
 
         <dependency>
             <groupId>junit</groupId>
@@ -177,6 +166,13 @@
             <groupId>org.neo4j.test</groupId>
             <artifactId>neo4j-harness</artifactId>
             <version>${neo4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
 
