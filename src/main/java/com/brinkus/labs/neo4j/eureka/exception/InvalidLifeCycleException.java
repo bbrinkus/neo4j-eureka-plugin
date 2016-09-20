@@ -19,20 +19,18 @@
 package com.brinkus.labs.neo4j.eureka.exception;
 
 /**
- * Thrown if the REST client HTTP response data processing fails.
+ * Thrown if the lifecycle try to use a state that is not valid (de-registration/keep-alive without registration).
  */
-public class ResponseProcessFailedException extends RestClientException {
+public class InvalidLifeCycleException extends EurekaPluginException {
 
     /**
-     * Create a new instance of {@link ResponseProcessFailedException}.
+     * Create a new instance of {@link InvalidLifeCycleException}
      *
      * @param message
      *         the detail message.
-     * @param cause
-     *         the cause of the error.
      */
-    public ResponseProcessFailedException(final String message, final Throwable cause) {
-        super(message, cause);
+    public InvalidLifeCycleException(final String message) {
+        super(message);
     }
 
 }

@@ -18,12 +18,29 @@
 
 package com.brinkus.labs.neo4j.eureka.exception;
 
+/**
+ * Top-level exception for all REST client related errors.
+ */
 public class RestClientException extends EurekaPluginException {
 
+    /**
+     * Create a new instance of {@link RestClientException}.
+     *
+     * @param message
+     *         the detail message.
+     */
     public RestClientException(final String message) {
         super(message);
     }
 
+    /**
+     * Create a new instance of {@link RestClientException}.
+     *
+     * @param message
+     *         the detail message.
+     * @param cause
+     *         the cause of the error.
+     */
     public RestClientException(final String message, final Throwable cause) {
         super(message, cause);
     }

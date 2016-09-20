@@ -18,8 +18,19 @@
 
 package com.brinkus.labs.neo4j.eureka.exception;
 
+/**
+ * Thrown if the REST client request failed.
+ */
 public class RequestFailedException extends RestClientException {
 
+    /**
+     * Create a new instance of {@link RequestFailedException}.
+     *
+     * @param message
+     *         the detail message.
+     * @param cause
+     *         the cause of the error.
+     */
     public RequestFailedException(final String message, final Throwable cause) {
         super(message, cause);
     }

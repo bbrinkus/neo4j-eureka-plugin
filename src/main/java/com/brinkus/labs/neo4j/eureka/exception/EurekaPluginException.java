@@ -18,13 +18,31 @@
 
 package com.brinkus.labs.neo4j.eureka.exception;
 
+/**
+ * Top level exception for the plugin related errors.
+ */
 public class EurekaPluginException extends Exception {
 
+    /**
+     * Create a new instance of {@link EurekaPluginException}.
+     *
+     * @param message
+     *         the detail message.
+     */
     public EurekaPluginException(final String message) {
         super(message);
     }
 
+    /**
+     * Create a new instance of {@link EurekaPluginException}.
+     *
+     * @param message
+     *         the detail message.
+     * @param cause
+     *         the cause of the error.
+     */
     public EurekaPluginException(final String message, final Throwable cause) {
         super(message, cause);
     }
+
 }

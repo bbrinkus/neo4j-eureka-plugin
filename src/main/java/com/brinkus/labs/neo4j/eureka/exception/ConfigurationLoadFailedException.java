@@ -18,9 +18,19 @@
 
 package com.brinkus.labs.neo4j.eureka.exception;
 
+/**
+ * Thrown to indicate an error during the configuration loading process.
+ */
 public class ConfigurationLoadFailedException extends EurekaPluginException {
 
+    /**
+     * Create a new instance of {@link ConfigurationLoadFailedException}.
+     *
+     * @param cause
+     *         the cause of the error.
+     */
     public ConfigurationLoadFailedException(final Throwable cause) {
         super("An error occurred during the configuration reading process.", cause);
     }
+
 }

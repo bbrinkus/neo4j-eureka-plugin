@@ -18,10 +18,19 @@
 
 package com.brinkus.labs.neo4j.eureka.exception;
 
+/***
+ * Unchecked exception thrown if there is a fatal error and the plug-in need to be shut down.
+ */
 public class EurekaPluginFatalException extends RuntimeException {
 
-    public EurekaPluginFatalException(Throwable e) {
-        super("An unrecoverable error occurred. Shutting down plugin!", e);
+    /**
+     * Create a new instance of {@link EurekaPluginFatalException}.
+     *
+     * @param cause
+     *         the cause of the error.
+     */
+    public EurekaPluginFatalException(Throwable cause) {
+        super("An unrecoverable error occurred. Shutting down plugin!", cause);
     }
 
 }

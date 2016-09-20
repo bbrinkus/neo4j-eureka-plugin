@@ -18,8 +18,17 @@
 
 package com.brinkus.labs.neo4j.eureka.exception;
 
+/**
+ * Thrown if the REST client HTTP response's status code is not matching with the expected.
+ */
 public class ResponseCodeNotMatchingException extends RestClientException {
 
+    /**
+     * Create a new instance of {@link ResponseCodeNotMatchingException}.
+     *
+     * @param message
+     *         the detail message.
+     */
     public ResponseCodeNotMatchingException(final String message) {
         super(message);
     }
