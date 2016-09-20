@@ -109,12 +109,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.esotericsoftware.yamlbeans</groupId>
-            <artifactId>yamlbeans</artifactId>
-            <version>1.09</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.netflix.eureka</groupId>
             <artifactId>eureka-client</artifactId>
             <version>1.4.11</version>
