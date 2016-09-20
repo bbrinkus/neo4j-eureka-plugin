@@ -26,7 +26,6 @@ import com.netflix.appinfo.LeaseInfo;
 import com.netflix.appinfo.MyDataCenterInfo;
 import org.neo4j.logging.FormattedLog;
 import org.neo4j.logging.Log;
-import org.neo4j.procedure.Context;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -36,15 +35,15 @@ public class InstanceInfoFactory {
 
     private final Log log = FormattedLog.toOutputStream(System.out);
 
-    public static InstanceInfoFactory getFactory() {
-        return new InstanceInfoFactory();
-    }
-
     /**
      * Creates a new instance of {@link InstanceInfoFactory}
      */
-    InstanceInfoFactory() {
+    private InstanceInfoFactory() {
         // default
+    }
+
+    public static InstanceInfoFactory getFactory() {
+        return new InstanceInfoFactory();
     }
 
     public InstanceInfo createDefault(
@@ -95,6 +94,7 @@ public class InstanceInfoFactory {
 
         // e.g.: i-0f84ec0b4c02e7878:neo4j:7474
         final String fullInstanceId = String.format("%s:%s:%d", instanceId, registration.getName(), registration.getPort().getPort()).toLowerCase();
+        log.info("Eureka instance identifier: %s", fullInstanceId);
 
         final LeaseInfo leaseInfo = LeaseInfo.Builder
                 .newBuilder()
@@ -114,7 +114,7 @@ public class InstanceInfoFactory {
                 .enablePort(InstanceInfo.PortType.SECURE, registration.getSecurePort().isEnabled())
                 .setDataCenterInfo(dataCenterInfo)
                 .setLeaseInfo(leaseInfo)
-                .setMetadata(new HashMap<String, String>())
+                .setMetadata(new HashMap<>())
                 .setAppGroupName("UNKNOWN")
                 .setHomePageUrlForDeser(registration.getHomePageUrl())
                 .setStatusPageUrlForDeser(registration.getStatusPageUrl())

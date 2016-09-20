@@ -21,7 +21,6 @@ package com.brinkus.labs.neo4j.eureka.component;
 import com.brinkus.labs.neo4j.eureka.exception.RestClientException;
 import org.neo4j.logging.FormattedLog;
 import org.neo4j.logging.Log;
-import org.neo4j.procedure.Context;
 
 /**
  * Runnable to handle the lifecycle service continuity.

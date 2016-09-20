@@ -23,7 +23,6 @@ import com.brinkus.labs.neo4j.eureka.type.config.Registration;
 import org.apache.commons.lang3.Validate;
 import org.neo4j.logging.FormattedLog;
 import org.neo4j.logging.Log;
-import org.neo4j.procedure.Context;
 
 /**
  * Shutdown hook that will send a delete request to the discovery service to de-register the current application.

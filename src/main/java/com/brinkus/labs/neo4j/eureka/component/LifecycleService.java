@@ -30,7 +30,6 @@ import com.netflix.appinfo.AmazonInfo;
 import com.netflix.appinfo.InstanceInfo;
 import org.neo4j.logging.FormattedLog;
 import org.neo4j.logging.Log;
-import org.neo4j.procedure.Context;
 
 /**
  * Handle the instance lifecycle in the discovery service.

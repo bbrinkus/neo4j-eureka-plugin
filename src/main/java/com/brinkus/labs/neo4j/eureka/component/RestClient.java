@@ -46,7 +46,6 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.neo4j.logging.FormattedLog;
 import org.neo4j.logging.Log;
-import org.neo4j.procedure.Context;
 
 import java.io.IOException;
 import java.util.Arrays;
