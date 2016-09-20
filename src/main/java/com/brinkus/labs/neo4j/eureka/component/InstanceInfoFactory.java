@@ -24,8 +24,9 @@ import com.netflix.appinfo.DataCenterInfo;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.appinfo.LeaseInfo;
 import com.netflix.appinfo.MyDataCenterInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.neo4j.logging.FormattedLog;
+import org.neo4j.logging.Log;
+import org.neo4j.procedure.Context;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -33,7 +34,7 @@ import java.util.HashMap;
 
 public class InstanceInfoFactory {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InstanceInfoFactory.class);
+    private final Log log = FormattedLog.toOutputStream(System.out);
 
     public static InstanceInfoFactory getFactory() {
         return new InstanceInfoFactory();
@@ -65,14 +66,14 @@ public class InstanceInfoFactory {
         String ipAddress;
 
         if (amazonInfo.getMetadata().isEmpty()) {
-            LOGGER.warn("Using own data center information");
+            log.warn("Using own data center information");
             dataCenterInfo = new MyDataCenterInfo(DataCenterInfo.Name.MyOwn);
 
             instanceId = registration.getName();
             hostname = registration.getHostname();
             ipAddress = registration.getIpAddress();
         } else {
-            LOGGER.warn("Using Amazon data center information");
+            log.warn("Using Amazon data center information");
             dataCenterInfo = amazonInfo;
 
             instanceId = amazonInfo.get(AmazonInfo.MetaDataKey.instanceId);
@@ -86,8 +87,8 @@ public class InstanceInfoFactory {
                 }
             }
 
-            LOGGER.info("Eureka instance ip address: {}", ipAddress);
-            LOGGER.info("Eureka instance hostname: {}", hostname);
+            log.info("Eureka instance ip address: %s", ipAddress);
+            log.info("Eureka instance hostname: %s", hostname);
         }
 
         final long timestamp = System.currentTimeMillis();
@@ -129,11 +130,11 @@ public class InstanceInfoFactory {
         try {
             InetAddress address = InetAddress.getByName(ipAddress);
             if (address != null && address.getHostName() != null) {
-                LOGGER.info("Overriding Amazon hostname", address.getHostName());
+                log.info("Overriding Amazon hostname", address.getHostName());
                 return address.getHostName();
             }
         } catch (UnknownHostException e) {
-            LOGGER.warn("An error occurred during the hostname query. Using the aws hostname.", e);
+            log.warn("An error occurred during the hostname query. Using the aws hostname.", e);
         }
         return null;
     }

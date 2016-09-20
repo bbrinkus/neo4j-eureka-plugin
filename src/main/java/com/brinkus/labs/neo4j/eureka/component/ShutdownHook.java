@@ -21,8 +21,9 @@ package com.brinkus.labs.neo4j.eureka.component;
 import com.brinkus.labs.neo4j.eureka.exception.RestClientException;
 import com.brinkus.labs.neo4j.eureka.type.config.Registration;
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.neo4j.logging.FormattedLog;
+import org.neo4j.logging.Log;
+import org.neo4j.procedure.Context;
 
 /**
  * Shutdown hook that will send a delete request to the discovery service to de-register the current application.
@@ -83,7 +84,7 @@ public class ShutdownHook {
         }
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ShutdownHook.class);
+    private final Log log = FormattedLog.toOutputStream(System.out);
 
     private final Registration registration;
 
@@ -108,14 +109,14 @@ public class ShutdownHook {
      * @return true if the process was success.
      */
     public boolean execute() {
-        LOGGER.info("Shutting down service");
+        log.info("Shutting down service");
         String uri = getUri();
         try {
             restClient.delete(uri, RestClient.STATUS_OK);
             return true;
         } catch (RestClientException e) {
             // just log the exception because were are already shutting down
-            LOGGER.warn("An error occurred during the request", e);
+            log.warn("An error occurred during the request", e);
             return false;
         }
     }

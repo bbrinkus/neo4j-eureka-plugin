@@ -28,8 +28,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.netflix.appinfo.AmazonInfo;
 import com.netflix.appinfo.InstanceInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.neo4j.logging.FormattedLog;
+import org.neo4j.logging.Log;
+import org.neo4j.procedure.Context;
 
 /**
  * Handle the instance lifecycle in the discovery service.
@@ -80,11 +81,11 @@ public class LifecycleService {
         }
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LifecycleService.class);
-
     private static final String APPLICATION_URI = "/eureka/apps/%s";
 
     private static final String INSTANCE_URI = "/eureka/apps/%s/%s";
+
+    private final Log log = FormattedLog.toOutputStream(System.out);
 
     private final Registration registration;
 
@@ -130,7 +131,7 @@ public class LifecycleService {
      *         an error occurred during the HTTP communication
      */
     public void register() throws RestClientException {
-        LOGGER.info("Registering application instance ({})", restClient.getHost());
+        log.info("Registering application instance (%s)", restClient.getHost());
 
         // create a new instance info before every registration
         instanceInfo = InstanceInfoFactory.getFactory()
@@ -141,7 +142,7 @@ public class LifecycleService {
             content = mapper.writeValueAsString(instanceInfo);
         } catch (JsonProcessingException e) {
             String message = "An error occurred during the InstanceInfo serialization. Shutting down the plug-in.";
-            LOGGER.error(message, e);
+            log.error(message, e);
             throw new EurekaPluginFatalException(e);
         }
 
@@ -158,7 +159,7 @@ public class LifecycleService {
      *         an error occurred during the HTTP communication
      */
     public void keepAlive() throws RestClientException {
-        LOGGER.info("Keeping application status alive ({})", restClient.getHost());
+        log.info("Keeping application status alive (%s)", restClient.getHost());
 
         String uri = String.format(INSTANCE_URI, registration.getName(), instanceInfo.getInstanceId());
         restClient.put(uri);
@@ -173,7 +174,7 @@ public class LifecycleService {
      *         an error occurred during the HTTP communication
      */
     public void deregister() throws RestClientException {
-        LOGGER.info("De-registering application instance ({})", restClient.getHost());
+        log.info("De-registering application instance (%s)", restClient.getHost());
 
         String uri = String.format(INSTANCE_URI, registration.getName(), instanceInfo.getInstanceId());
         restClient.delete(uri);

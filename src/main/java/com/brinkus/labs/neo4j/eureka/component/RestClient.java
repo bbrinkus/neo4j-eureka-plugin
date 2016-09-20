@@ -44,8 +44,9 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.neo4j.logging.FormattedLog;
+import org.neo4j.logging.Log;
+import org.neo4j.procedure.Context;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -95,13 +96,13 @@ public class RestClient {
 
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestClient.class);
-
     public static final int STATUS_OK = 200;
 
     public static final int STATUS_NO_CONTENT = 204;
 
     public static final String NO_CONTENT = "";
+
+    private final Log log = FormattedLog.toOutputStream(System.out);
 
     private final String host;
 
@@ -168,12 +169,12 @@ public class RestClient {
             response = httpClient.execute(request);
         } catch (IOException e) {
             String message = "An error occurred during the registration HTTP communication process!";
-            LOGGER.error(message, e);
+            log.error(message, e);
             throw new RequestFailedException(message, e);
         }
         if (response.getStatusLine().getStatusCode() != httpStatus) {
             String message = String.format("The response status code %s is not matching with the expected %s!", response.getStatusLine().getStatusCode(), host);
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ResponseCodeNotMatchingException(message);
         }
 
@@ -185,7 +186,7 @@ public class RestClient {
             }
         } catch (IOException e) {
             String message = "An error occurred during the response process!";
-            LOGGER.error(message, e);
+            log.error(message, e);
             throw new ResponseProcessFailedException(message, e);
         }
     }

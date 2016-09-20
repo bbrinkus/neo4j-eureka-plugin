@@ -29,10 +29,10 @@ import com.brinkus.labs.neo4j.eureka.type.PluginConfiguration;
 import com.brinkus.labs.neo4j.eureka.type.config.Configuration;
 import com.brinkus.labs.neo4j.eureka.type.config.Service;
 import com.netflix.appinfo.AmazonInfo;
+import org.neo4j.logging.FormattedLog;
+import org.neo4j.logging.Log;
 import org.neo4j.server.plugins.Description;
 import org.neo4j.server.plugins.ServerPlugin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,28 +43,28 @@ import java.util.List;
 @Description("Netflix Eureka Service Discovery plugin")
 public class EurekaPlugin extends ServerPlugin {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerPlugin.class);
+    private final Log log = FormattedLog.toOutputStream(System.out);
 
     public EurekaPlugin() {
         super();
-        LOGGER.info("Create a new instance of EurekaPlugin.");
+        log.info("Create a new instance of EurekaPlugin.");
         run(new PluginConfiguration.Builder().build());
     }
 
     public EurekaPlugin(final String name) {
         super(name);
-        LOGGER.info("Create a new instance of EurekaPlugin with name {}", name);
+        log.info("Create a new instance of EurekaPlugin with name %s", name);
         run(new PluginConfiguration.Builder().build());
     }
 
     EurekaPlugin(final PluginConfiguration pluginConfiguration) {
         super();
-        LOGGER.info("Create a new instance of EurekaPlugin with custom plugin configuration");
+        log.info("Create a new instance of EurekaPlugin with custom plugin configuration");
         run(pluginConfiguration);
     }
 
     private void run(final PluginConfiguration pluginConfiguration) {
-        LOGGER.info("Start EurekaPlugin.");
+        log.info("Start EurekaPlugin.");
         final Configuration configuration = loadConfiguration(pluginConfiguration.getConfigurationFilePath());
 
         List<RestClient> serviceClients = initializeServiceClients(configuration);
@@ -86,11 +86,11 @@ public class EurekaPlugin extends ServerPlugin {
 
     public Configuration loadConfiguration(final String configurationFilePath) {
         try {
-            LOGGER.info("Reading configuration settings.");
+            log.info("Reading configuration settings.");
             ConfigurationLoader configurationLoader = new ConfigurationLoader();
             return configurationLoader.loadConfiguration(configurationFilePath);
         } catch (EurekaPluginException e) {
-            LOGGER.error("An error occurred the properties reading process!");
+            log.error("An error occurred the properties reading process!");
             throw new EurekaPluginFatalException(e);
         }
     }
@@ -100,7 +100,7 @@ public class EurekaPlugin extends ServerPlugin {
             final List<RestClient> serviceClients
     ) {
         for (RestClient client : serviceClients) {
-            LOGGER.info(String.format("Registering new shutdown hook for %s", client.getHost()));
+            log.info(String.format("Registering new shutdown hook for %s", client.getHost()));
             final ShutdownHook hook = new ShutdownHook.Builder()
                     .withRegistration(configuration.getRegistration())
                     .withRestClient(client)
@@ -121,7 +121,7 @@ public class EurekaPlugin extends ServerPlugin {
             final AmazonInfo amazonInfo
     ) {
         for (RestClient client : serviceClients) {
-            LOGGER.info(String.format("Starting lifecycle service for %s", client.getHost()));
+            log.info(String.format("Starting lifecycle service for %s", client.getHost()));
             final LifecycleService lifecycleService = new LifecycleService.Builder()
                     .withRegistration(configuration.getRegistration())
                     .withRestClient(client)
