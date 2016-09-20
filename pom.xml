@@ -12,7 +12,7 @@
 
     <groupId>com.brinkus.labs</groupId>
     <artifactId>neo4j-eureka-plugin</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>Neo4j Eureka Plugin</name>
     <description>Netflix Eureka Client Plugin for Neo4j</description>
@@ -112,6 +112,12 @@
             <groupId>com.esotericsoftware.yamlbeans</groupId>
             <artifactId>yamlbeans</artifactId>
             <version>1.09</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netflix.eureka</groupId>
+            <artifactId>eureka-client</artifactId>
+            <version>1.4.11</version>
         </dependency>
 
         <dependency>
