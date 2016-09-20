@@ -18,7 +18,7 @@
 
 package com.brinkus.labs.neo4j.eureka.component;
 
-import com.brinkus.labs.neo4j.eureka.exception.RestClientException;
+import com.brinkus.labs.neo4j.eureka.exception.EurekaPluginException;
 import org.neo4j.logging.FormattedLog;
 import org.neo4j.logging.Log;
 
@@ -92,16 +92,16 @@ public class LifecycleServiceRunnable implements Runnable {
                     // wait 30 sec between the keep alive signals
                     sleep(keepAliveTimeoutSec);
                 }
-            } catch (RestClientException e) {
-                log.error("An error occurred during the HTTP communication process. Re-start the process.", e);
+            } catch (EurekaPluginException e) {
+                log.error("An error occurred during the lifecycle process. Re-starting the process!", e);
                 sleep(5);
             } finally {
                 try {
                     // deregister the application instance
                     lifecycleService.deregister();
-                } catch (RestClientException e) {
+                } catch (EurekaPluginException e) {
                     // just log the error. The new registration will override the process
-                    log.error("An error occurred during the HTTP communication process", e);
+                    log.error("An error occurred during the de-registration process!", e);
                 }
             }
         }

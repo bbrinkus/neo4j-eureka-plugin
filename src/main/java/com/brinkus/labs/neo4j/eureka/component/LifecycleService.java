@@ -18,7 +18,9 @@
 
 package com.brinkus.labs.neo4j.eureka.component;
 
+import com.brinkus.labs.neo4j.eureka.exception.EurekaPluginException;
 import com.brinkus.labs.neo4j.eureka.exception.EurekaPluginFatalException;
+import com.brinkus.labs.neo4j.eureka.exception.InvalidLifeCycleException;
 import com.brinkus.labs.neo4j.eureka.exception.RestClientException;
 import com.brinkus.labs.neo4j.eureka.type.LifecycleStatus;
 import com.brinkus.labs.neo4j.eureka.type.config.Registration;
@@ -129,12 +131,11 @@ public class LifecycleService {
      * @throws RestClientException
      *         an error occurred during the HTTP communication
      */
-    public void register() throws RestClientException {
+    public void register() throws EurekaPluginException {
         log.info("Registering application instance (%s)", restClient.getHost());
 
         // create a new instance info before every registration
-        instanceInfo = InstanceInfoFactory.getFactory()
-                .createDefault(registration, amazonInfo, InstanceInfo.InstanceStatus.UP);
+        createInstanceInfo();
 
         String content;
         try {
@@ -157,8 +158,11 @@ public class LifecycleService {
      * @throws RestClientException
      *         an error occurred during the HTTP communication
      */
-    public void keepAlive() throws RestClientException {
+    public void keepAlive() throws EurekaPluginException {
         log.debug("Keeping application status alive (%s)", restClient.getHost());
+        if (instanceInfo == null) {
+            throw new InvalidLifeCycleException("Instance info instance does not exist!");
+        }
 
         String uri = String.format(INSTANCE_URI, registration.getName(), instanceInfo.getInstanceId());
         restClient.put(uri);
@@ -172,8 +176,11 @@ public class LifecycleService {
      * @throws RestClientException
      *         an error occurred during the HTTP communication
      */
-    public void deregister() throws RestClientException {
+    public void deregister() throws EurekaPluginException {
         log.info("De-registering application instance (%s)", restClient.getHost());
+        if (instanceInfo == null) {
+            throw new InvalidLifeCycleException("Instance info instance does not exist!");
+        }
 
         try {
             // sleep 1 sec before the de-registration
@@ -181,12 +188,24 @@ public class LifecycleService {
             // TODO investigate further
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            log.error("An error occurred during the de-registration delay process");
+            log.error("An error occurred during the de-registration delaying process");
         }
         String uri = String.format(INSTANCE_URI, registration.getName(), instanceInfo.getInstanceId());
         restClient.delete(uri);
 
         updateStatus(LifecycleStatus.DEREGISTERED);
+        instanceInfo = null;
+    }
+
+    /**
+     * Create a new {@link InstanceInfo} object.
+     *
+     * @return a new {@link InstanceInfo}
+     */
+    InstanceInfo createInstanceInfo() {
+        instanceInfo = InstanceInfoFactory.getFactory()
+                .createDefault(registration, amazonInfo, InstanceInfo.InstanceStatus.UP);
+        return instanceInfo;
     }
 
     private void updateStatus(LifecycleStatus status) {
