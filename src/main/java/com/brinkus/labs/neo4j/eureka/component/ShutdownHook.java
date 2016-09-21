@@ -81,11 +81,23 @@ public class ShutdownHook {
     }
 
     /**
+     * Register a new shutdown hook;
+     */
+    public void register() {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                execute();
+            }
+        });
+    }
+
+    /**
      * Execute the de-registration process.
      *
      * @return true if the process was success.
      */
-    public boolean execute() {
+    boolean execute() {
         try {
             lifecycleService.deregister();
             return true;

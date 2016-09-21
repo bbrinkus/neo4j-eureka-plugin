@@ -27,7 +27,6 @@ import com.brinkus.labs.neo4j.eureka.exception.EurekaPluginException;
 import com.brinkus.labs.neo4j.eureka.exception.EurekaPluginFatalException;
 import com.brinkus.labs.neo4j.eureka.type.config.Configuration;
 import com.brinkus.labs.neo4j.eureka.type.config.Service;
-import com.netflix.appinfo.AmazonInfo;
 import org.neo4j.logging.FormattedLog;
 import org.neo4j.logging.Log;
 import org.neo4j.server.plugins.Description;
@@ -79,10 +78,32 @@ public class EurekaPlugin extends ServerPlugin {
 
     private void run(final EurekaPluginConfiguration pluginConfiguration) {
         log.info("Start EurekaPlugin.");
-        final Configuration configuration = loadConfiguration(pluginConfiguration.getConfigurationFilePath());
 
-        List<RestClient> serviceClients = initializeServiceClients(configuration);
-        startLifecycles(serviceClients, configuration, pluginConfiguration.getAmazonInfo());
+        final Configuration configuration = loadConfiguration(pluginConfiguration.getConfigurationFilePath());
+        final List<RestClient> serviceClients = initializeServiceClients(configuration);
+
+        for (RestClient client : serviceClients) {
+            final LifecycleService lifecycleService = new LifecycleService.Builder()
+                    .withRegistration(configuration.getRegistration())
+                    .withRestClient(client)
+                    .withAwsInfo(pluginConfiguration.getAmazonInfo())
+                    .build();
+
+            log.info(String.format("Registering new shutdown hook for %s from %s to %s",
+                                   configuration.getRegistration().getName(),
+                                   configuration.getRegistration().getHostname(),
+                                   client.getHost()));
+            new ShutdownHook.Builder()
+                    .withLifecycleService(lifecycleService)
+                    .build()
+                    .register();
+
+            log.info(String.format("Starting lifecycle service for %s from %s to %s",
+                                   configuration.getRegistration().getName(),
+                                   configuration.getRegistration().getHostname(),
+                                   client.getHost()));
+            new Thread(new LifecycleServiceRunnable(lifecycleService)).start();
+        }
     }
 
     private Configuration loadConfiguration(final String configurationFilePath) {
@@ -106,34 +127,6 @@ public class EurekaPlugin extends ServerPlugin {
             clients.add(restClient);
         }
         return clients;
-    }
-
-    private void startLifecycles(
-            final List<RestClient> serviceClients,
-            final Configuration configuration,
-            final AmazonInfo amazonInfo
-    ) {
-        for (RestClient client : serviceClients) {
-            final LifecycleService lifecycleService = new LifecycleService.Builder()
-                    .withRegistration(configuration.getRegistration())
-                    .withRestClient(client)
-                    .withAwsInfo(amazonInfo)
-                    .build();
-
-            log.info(String.format("Registering new shutdown hook for %s", client.getHost()));
-            final ShutdownHook hook = new ShutdownHook.Builder()
-                    .withLifecycleService(lifecycleService)
-                    .build();
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    hook.execute();
-                }
-            });
-
-            log.info(String.format("Starting lifecycle service for %s", client.getHost()));
-            new Thread(new LifecycleServiceRunnable(lifecycleService)).start();
-        }
     }
 
 }
