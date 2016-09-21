@@ -1,7 +1,7 @@
 # List of the service discovery servers host and port information
 services:
   -
-    host: localhost
+    host: 127.0.0.1
     port: 18761
 
 # Registration information used in discovery service
