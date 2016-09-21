@@ -12,7 +12,7 @@
 
     <groupId>com.brinkus.labs</groupId>
     <artifactId>neo4j-eureka-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>neo4j-eureka-plugin</name>
@@ -62,14 +62,17 @@
         <docs-maven-plugin.version>5</docs-maven-plugin.version>
 
         <!-- Dependencies versions -->
-        <neo4j.version>3.0.4</neo4j.version>
-        <slf4j.version>1.7.21</slf4j.version>
+        <eureka.version>1.4.11</eureka.version>
+        <hamcrest.version>1.3</hamcrest.version>
         <httpclient.version>4.5.2</httpclient.version>
         <jackson.version>2.7.4</jackson.version>
         <junit.version>4.12</junit.version>
-        <hamcrest.version>1.3</hamcrest.version>
-        <mockito.version>1.10.19</mockito.version>
         <lang3.version>3.3.2</lang3.version>
+        <mockito.version>1.10.19</mockito.version>
+        <neo4j.version>3.0.4</neo4j.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <xstream.version>1.4.8</xstream.version>
+        <yamlbeans.version>1.09</yamlbeans.version>
     </properties>
 
     <build>
@@ -132,7 +135,7 @@
         <dependency>
             <groupId>com.esotericsoftware.yamlbeans</groupId>
             <artifactId>yamlbeans</artifactId>
-            <version>1.09</version>
+            <version>${yamlbeans.version}</version>
         </dependency>
 
         <dependency>
@@ -150,7 +153,13 @@
         <dependency>
             <groupId>com.netflix.eureka</groupId>
             <artifactId>eureka-client</artifactId>
-            <version>1.4.11</version>
+            <version>${eureka.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>${xstream.version}</version>
         </dependency>
 
         <dependency>
