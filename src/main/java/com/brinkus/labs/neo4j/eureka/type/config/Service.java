@@ -33,18 +33,40 @@ public class Service {
      */
     private int port;
 
+    /**
+     * Get the service's fully qualified hostname or ip address.
+     *
+     * @return the hostname or ip address
+     */
     public String getHost() {
         return host;
     }
 
+    /**
+     * Set the service's fully qualified hostname or ip address.
+     *
+     * @param host
+     *         the hostname or ip address
+     */
     public void setHost(final String host) {
         this.host = host;
     }
 
+    /**
+     * Get the service's port number.
+     *
+     * @return the service's port number.
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     * Set the service's port number.
+     *
+     * @param port
+     *         service's port number.
+     */
     public void setPort(final int port) {
         this.port = port;
     }

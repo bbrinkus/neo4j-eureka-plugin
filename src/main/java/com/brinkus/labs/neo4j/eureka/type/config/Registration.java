@@ -49,7 +49,7 @@ public class Registration {
     private String vipAddress;
 
     /**
-     * The instance's unsecure port.
+     * The instance's insecure port.
      */
     private RegistrationPort port;
 
@@ -73,88 +73,192 @@ public class Registration {
      */
     private String homePageUrl;
 
+    /**
+     * Get the fully qualified hostname.
+     *
+     * @return fully qualified hostname.
+     */
     public String getHostname() {
         return hostname;
     }
 
+    /**
+     * Set the fully qualified hostname.
+     *
+     * @param hostname
+     *         fully qualified hostname.
+     */
     public void setHostname(final String hostname) {
         this.hostname = hostname;
     }
 
+    /**
+     * Get the instance's ip address.
+     *
+     * @return the ip address.
+     */
     public String getIpAddress() {
         return ipAddress;
     }
 
-    public Registration setIpAddress(final String ipAddress) {
+    /**
+     * Set the instance's ip address.
+     *
+     * @param ipAddress
+     *         the ip address.
+     */
+    public void setIpAddress(final String ipAddress) {
         this.ipAddress = ipAddress;
-        return this;
     }
 
-    public boolean isAwsDnsHostname() {
-        return awsDnsHostname;
-    }
-
+    /**
+     * Flag to indicate to use the fully qualified hostname instead of the aws hostname.
+     *
+     * @return the flag value (default false)
+     */
     public boolean useAwsDnsHostname() {
         return awsDnsHostname;
     }
 
-    public Registration setAwsDnsHostname(final boolean awsDnsHostname) {
+    /**
+     * Set the use the aws hostname.
+     *
+     * @param awsDnsHostname
+     *         the aws hostname usage state.
+     */
+    public void setAwsDnsHostname(final boolean awsDnsHostname) {
         this.awsDnsHostname = awsDnsHostname;
-        return this;
     }
 
+    /**
+     * Get the application's name of the instance.
+     *
+     * @return the application's name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the application's name of the instance.
+     *
+     * @param name
+     *         the application's name.
+     */
     public void setName(final String name) {
         this.name = name;
     }
 
+    /**
+     * Get the instance's Virtual Internet Protocol address.
+     *
+     * @return the VIP address.
+     */
     public String getVipAddress() {
         return vipAddress;
     }
 
+    /**
+     * Set the instance's Virtual Internet Protocol address.
+     *
+     * @param vipAddress
+     *         the VIP address.
+     */
     public void setVipAddress(final String vipAddress) {
         this.vipAddress = vipAddress;
     }
 
+    /**
+     * Get the instance's insecure port.
+     *
+     * @return the insecure port.
+     */
     public RegistrationPort getPort() {
         return port;
     }
 
+    /**
+     * Set the instance's insecure port.
+     *
+     * @param port
+     *         the insecure port.
+     */
     public void setPort(final RegistrationPort port) {
         this.port = port;
     }
 
+    /**
+     * Get the instance's secure port.
+     *
+     * @return the secure port.
+     */
     public RegistrationPort getSecurePort() {
         return securePort;
     }
 
+    /**
+     * Set the instance's secure port.
+     *
+     * @param securePort
+     *         the secure port.
+     */
     public void setSecurePort(final RegistrationPort securePort) {
         this.securePort = securePort;
     }
 
+    /**
+     * Get the instance's status page url.
+     *
+     * @return the status page url.
+     */
     public String getStatusPageUrl() {
         return statusPageUrl;
     }
 
+    /**
+     * Set the instance's status page url.
+     *
+     * @param statusPageUrl
+     *         the status page url.
+     */
     public void setStatusPageUrl(final String statusPageUrl) {
         this.statusPageUrl = statusPageUrl;
     }
 
+    /**
+     * Get the instance's health check url.
+     *
+     * @return the health check url.
+     */
     public String getHealthCheckUrl() {
         return healthCheckUrl;
     }
 
+    /**
+     * Set the instance's health check url.
+     *
+     * @param healthCheckUrl
+     *         the health check url.
+     */
     public void setHealthCheckUrl(final String healthCheckUrl) {
         this.healthCheckUrl = healthCheckUrl;
     }
 
+    /**
+     * Get the instance's start page url.
+     *
+     * @return the start page url.
+     */
     public String getHomePageUrl() {
         return homePageUrl;
     }
 
+    /**
+     * Set the instance's start page url.
+     *
+     * @param homePageUrl
+     *         the start page url.
+     */
     public void setHomePageUrl(final String homePageUrl) {
         this.homePageUrl = homePageUrl;
     }

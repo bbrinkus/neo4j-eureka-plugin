@@ -19,7 +19,7 @@
 package com.brinkus.labs.neo4j.eureka.type.config;
 
 /**
- * The the Neo4j application's used port and it's state.
+ * The Neo4j application's used port and it's state.
  */
 public class RegistrationPort {
 
@@ -33,18 +33,40 @@ public class RegistrationPort {
      */
     private boolean enabled;
 
+    /**
+     * Get the port number.
+     *
+     * @return the port number.
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     * Set the port number.
+     *
+     * @param port
+     *         the port number.
+     */
     public void setPort(final int port) {
         this.port = port;
     }
 
+    /**
+     * Flag to indicate that port is enable or not.
+     *
+     * @return the flag value (default false)
+     */
     public boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     * Set the port to enabled or disable state.
+     *
+     * @param enabled
+     *         the port state
+     */
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
     }

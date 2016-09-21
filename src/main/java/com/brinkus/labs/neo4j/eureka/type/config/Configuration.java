@@ -35,20 +35,41 @@ public class Configuration {
      */
     private Registration registration;
 
+    /**
+     * Get the list of the discovery services.
+     *
+     * @return the discovery services
+     */
     public List<Service> getServices() {
         return services;
     }
 
+    /**
+     * Set the list of the discovery services.
+     *
+     * @param services
+     *         the discovery services
+     */
     public void setServices(final List<Service> services) {
         this.services = services;
     }
 
+    /**
+     * Get the registration information.
+     *
+     * @return the registration information
+     */
     public Registration getRegistration() {
         return registration;
     }
 
+    /**
+     * Set the registration information.
+     *
+     * @param registration
+     *         the registration information
+     */
     public void setRegistration(final Registration registration) {
         this.registration = registration;
     }
-
 }
