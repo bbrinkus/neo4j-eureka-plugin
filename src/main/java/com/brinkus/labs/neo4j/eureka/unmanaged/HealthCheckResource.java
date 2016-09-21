@@ -23,8 +23,6 @@ import com.brinkus.labs.neo4j.eureka.type.health.HealthStatusCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Result;
-import org.neo4j.graphdb.Transaction;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,8 +31,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Unmanaged REST endpoint to execute query and set health status of the instance.
+ */
 @Path("/health")
 public class HealthCheckResource {
+
+    private static final int TIMEOUT = 1000;
 
     private final GraphDatabaseService service;
 
@@ -45,35 +48,35 @@ public class HealthCheckResource {
         this.mapper = new ObjectMapper();
     }
 
+    /**
+     * REST endpoint to get the health status.
+     *
+     * @return the REST endpoint's response containing the {@link HealthCheck} entity.
+     *
+     * @throws JsonProcessingException
+     *         if an error occurred during the entity serialization.
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response health() throws JsonProcessingException {
         HealthCheck healthCheck = healthCheck();
-        byte[] bytes = mapper.writeValueAsBytes(healthCheck);
-        return Response.status(Response.Status.OK).entity(bytes).build();
+        byte[] entity = mapper.writeValueAsBytes(healthCheck);
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .entity(entity)
+                .build();
     }
 
-    public HealthCheck healthCheck() {
+    private HealthCheck healthCheck() {
         try {
-            if (check()) {
+            if (service.isAvailable(TIMEOUT)) {
                 return new HealthCheck(HealthStatusCode.UP, "Neo4j health check was success.");
             } else {
                 return new HealthCheck(HealthStatusCode.DOWN, "Neo4j health check result was invalid!");
             }
         } catch (Exception e) {
-            return new HealthCheck(HealthStatusCode.DOWN, "Neo4j health check failed!");
+            return new HealthCheck(HealthStatusCode.OUT_OF_SERVICE, "Neo4j health check failed!");
         }
-    }
-
-    private boolean check() {
-        boolean hasEntry;
-        try (Transaction tx = service.beginTx()) {
-            Result result = service.execute("MATCH (n) RETURN n LIMIT 1");
-            // TODO ugly hack
-            hasEntry = result.resultAsString().contains("1 row");
-            tx.success();
-        }
-        return hasEntry;
     }
 
 }

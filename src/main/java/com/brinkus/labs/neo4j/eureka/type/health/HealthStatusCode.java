@@ -31,7 +31,12 @@ public enum HealthStatusCode {
     /**
      * The server is down.
      */
-    DOWN("DOWN");
+    DOWN("DOWN"),
+
+    /**
+     * The server is out of service.
+     */
+    OUT_OF_SERVICE("OUT_OF_SERVICE");
 
     /**
      * The value of the enum.
