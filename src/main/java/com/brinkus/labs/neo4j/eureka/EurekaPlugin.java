@@ -25,7 +25,6 @@ import com.brinkus.labs.neo4j.eureka.component.RestClient;
 import com.brinkus.labs.neo4j.eureka.component.ShutdownHook;
 import com.brinkus.labs.neo4j.eureka.exception.EurekaPluginException;
 import com.brinkus.labs.neo4j.eureka.exception.EurekaPluginFatalException;
-import com.brinkus.labs.neo4j.eureka.type.PluginConfiguration;
 import com.brinkus.labs.neo4j.eureka.type.config.Configuration;
 import com.brinkus.labs.neo4j.eureka.type.config.Service;
 import com.netflix.appinfo.AmazonInfo;
@@ -45,25 +44,40 @@ public class EurekaPlugin extends ServerPlugin {
 
     private final Log log = FormattedLog.toOutputStream(System.out);
 
+    /**
+     * Create a new instance of {@link EurekaPlugin}.
+     */
     public EurekaPlugin() {
         super();
         log.info("Create a new instance of EurekaPlugin.");
-        run(new PluginConfiguration.Builder().build());
+        run(new EurekaPluginConfiguration.Builder().build());
     }
 
+    /**
+     * Create a new instance of {@link EurekaPlugin}.
+     *
+     * @param name
+     *         the name of this extension.
+     */
     public EurekaPlugin(final String name) {
         super(name);
         log.info("Create a new instance of EurekaPlugin with name %s", name);
-        run(new PluginConfiguration.Builder().build());
+        run(new EurekaPluginConfiguration.Builder().build());
     }
 
-    EurekaPlugin(final PluginConfiguration pluginConfiguration) {
+    /**
+     * Create a new instance of {@link EurekaPlugin}.
+     *
+     * @param pluginConfiguration
+     *         the plugin's configuration information.
+     */
+    EurekaPlugin(final EurekaPluginConfiguration pluginConfiguration) {
         super();
         log.info("Create a new instance of EurekaPlugin with custom plugin configuration");
         run(pluginConfiguration);
     }
 
-    private void run(final PluginConfiguration pluginConfiguration) {
+    private void run(final EurekaPluginConfiguration pluginConfiguration) {
         log.info("Start EurekaPlugin.");
         final Configuration configuration = loadConfiguration(pluginConfiguration.getConfigurationFilePath());
 

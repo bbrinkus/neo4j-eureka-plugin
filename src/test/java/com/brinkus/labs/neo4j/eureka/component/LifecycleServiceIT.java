@@ -18,8 +18,8 @@
 
 package com.brinkus.labs.neo4j.eureka.component;
 
+import com.brinkus.labs.neo4j.eureka.EurekaPluginConfiguration;
 import com.brinkus.labs.neo4j.eureka.ServiceDiscoveryRunner;
-import com.brinkus.labs.neo4j.eureka.type.PluginConfiguration;
 import com.brinkus.labs.neo4j.eureka.type.config.Configuration;
 import com.brinkus.labs.neo4j.eureka.type.config.Service;
 import org.junit.AfterClass;
@@ -58,7 +58,7 @@ public class LifecycleServiceIT {
 
     @Before
     public void before() throws Exception {
-        PluginConfiguration pluginConfiguration = new PluginConfiguration.Builder().build();
+        EurekaPluginConfiguration pluginConfiguration = new EurekaPluginConfiguration.Builder().build();
 
         ConfigurationLoader configurationLoader = new ConfigurationLoader();
         Configuration configuration = configurationLoader.loadConfiguration(pluginConfiguration.getConfigurationFilePath());
