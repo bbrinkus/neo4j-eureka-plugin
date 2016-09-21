@@ -13,10 +13,49 @@
     <groupId>com.brinkus.labs</groupId>
     <artifactId>neo4j-eureka-plugin</artifactId>
     <version>1.0.0</version>
-
-    <name>Neo4j Eureka Plugin</name>
-    <description>Netflix Eureka Client Plugin for Neo4j</description>
     <packaging>jar</packaging>
+
+    <name>neo4j-eureka-plugin</name>
+    <description>Netflix Eureka Client Plugin for Neo4j</description>
+    <url>https://github.com/bbrinkus/neo4j-eureka-plugin</url>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License (GPL) version 3.0</name>
+            <url>http://www.gnu.org/licenses/</url>
+            <distribution>repo</distribution>
+            <comments>
+                Copyright (C) 2016 Balazs Brinkus
+
+                This program is free software; you can redistribute it and/or modify
+                it under the terms of the GNU General Public License as published by
+                the Free Software Foundation; either version 3 of the License, or
+                (at your option) any later version.
+
+                This program is distributed in the hope that it will be useful,
+                but WITHOUT ANY WARRANTY; without even the implied warranty of
+                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+                GNU General Public License for more details.
+
+                You should have received a copy of the GNU General Public License
+                along with this program. If not, see http://www.gnu.org/licenses/.
+            </comments>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/bbrinkus/neo4j-eureka-plugin</url>
+        <connection>scm:git:git://github.com/neo4j-eureka-plugin.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/neo4j-eureka-plugin.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Balazs Brinkus</name>
+            <email>balazs@brinkus.com</email>
+            <url>http://www.brinkus.com</url>
+        </developer>
+    </developers>
 
     <properties>
         <!-- Build plugins versions -->
