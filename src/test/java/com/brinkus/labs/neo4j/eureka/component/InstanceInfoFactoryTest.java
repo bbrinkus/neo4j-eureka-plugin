@@ -45,7 +45,7 @@ public class InstanceInfoFactoryTest {
     @Test
     public void createDefaultWithoutAmazonInfo() {
         InstanceInfo info = InstanceInfoFactory.getFactory()
-                .createDefault(configuration.getRegistration(), new AmazonInfo());
+                .create(configuration.getRegistration(), new AmazonInfo());
 
         assertThat(info.getId(), is("neo4j:neo4j:7474"));
         assertThat(info.getHostName(), is("localhost"));
@@ -58,7 +58,7 @@ public class InstanceInfoFactoryTest {
     @Test
     public void createDefaultWithoutAmazonInfoWithStatus() {
         InstanceInfo info = InstanceInfoFactory.getFactory()
-                .createDefault(configuration.getRegistration(), new AmazonInfo(), InstanceInfo.InstanceStatus.UP);
+                .create(configuration.getRegistration(), new AmazonInfo(), InstanceInfo.InstanceStatus.UP);
 
         assertThat(info.getId(), is("neo4j:neo4j:7474"));
         assertThat(info.getHostName(), is("localhost"));
@@ -71,7 +71,7 @@ public class InstanceInfoFactoryTest {
     @Test
     public void createDefaultWithAmazonInfo() {
         InstanceInfo info = InstanceInfoFactory.getFactory()
-                .createDefault(configuration.getRegistration(), getAmazonInfo());
+                .create(configuration.getRegistration(), getAmazonInfo());
 
         assertThat(info.getId(), is("i-0f84ec0b4c02e7878:neo4j:7474"));
         assertThat(info.getHostName(), is("ip-192-168-123-12.eu-central-1.compute.internal"));
@@ -84,7 +84,7 @@ public class InstanceInfoFactoryTest {
     @Test
     public void createDefaultWithAmazonInfooWithStatus() {
         InstanceInfo info = InstanceInfoFactory.getFactory()
-                .createDefault(configuration.getRegistration(), getAmazonInfo(), InstanceInfo.InstanceStatus.UP);
+                .create(configuration.getRegistration(), getAmazonInfo(), InstanceInfo.InstanceStatus.UP);
 
         assertThat(info.getId(), is("i-0f84ec0b4c02e7878:neo4j:7474"));
         assertThat(info.getHostName(), is("ip-192-168-123-12.eu-central-1.compute.internal"));

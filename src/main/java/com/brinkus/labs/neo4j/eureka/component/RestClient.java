@@ -51,24 +51,51 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * HTTP REST client.
+ */
 public class RestClient {
 
+    /**
+     * Builder to create a new {@link RestClient} instance.
+     */
     public static final class Builder {
 
         private String host;
 
         private int port;
 
+        /**
+         * Set the discovery service's host.
+         *
+         * @param host
+         *         the discovery service's host.
+         *
+         * @return the builder instance.
+         */
         public Builder withHost(final String host) {
             this.host = host;
             return this;
         }
 
+        /**
+         * Set the discovery service's port.
+         *
+         * @param port
+         *         the discovery service's port.
+         *
+         * @return the builder instance
+         */
         public Builder withPort(final int port) {
             this.port = port;
             return this;
         }
 
+        /**
+         * Create a new instance of the {@link RestClient}.
+         *
+         * @return the {@link RestClient} instance.
+         */
         public RestClient build() {
             List<BasicHeader> defaultHeaders = Arrays.asList(new BasicHeader(HttpHeaders.ACCEPT, "application/json"));
 
@@ -109,60 +136,180 @@ public class RestClient {
 
     private final HttpClient httpClient;
 
+    /**
+     * Create a new instance of {@link RestClient}.
+     *
+     * @param host
+     *         the discovery service's host.
+     * @param port
+     *         the discovery service's port number.
+     * @param httpClient
+     *         the HTTP client instance.
+     */
     RestClient(final String host, final int port, final HttpClient httpClient) {
         this.host = host;
         this.port = port;
         this.httpClient = httpClient;
     }
 
+    /**
+     * Get the discovery service host.
+     *
+     * @return the host of the discovery service.
+     */
     public String getHost() {
         return host;
     }
 
+    /**
+     * Get the discovery service port.
+     *
+     * @return the port of the discovery service.
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     * Execute a HTTP GET request to the given uri.
+     *
+     * @param uri
+     *         the target uri.
+     *
+     * @return the response message.
+     *
+     * @throws RestClientException
+     *         if an error occur during the request.
+     */
     public String get(final String uri) throws RestClientException {
         return get(uri, STATUS_OK);
     }
 
-    public String get(final String uri, final int status) throws RestClientException {
+    /**
+     * Execute a HTTP GET request to the given uri with the expected status code.
+     *
+     * @param uri
+     *         the target uri.
+     * @param statusCode
+     *         the expected response status code.
+     *
+     * @return the response message.
+     *
+     * @throws RestClientException
+     *         if an error occur during the request.
+     */
+    public String get(final String uri, final int statusCode) throws RestClientException {
         HttpGet request = new HttpGet(uri);
-        return sendRequests(request, status);
+        return sendRequests(request, statusCode);
     }
 
+    /**
+     * Execute a HTTP POST request to the given uri.
+     *
+     * @param uri
+     *         the target uri.
+     * @param content
+     *         the request's content
+     *
+     * @return the response message.
+     *
+     * @throws RestClientException
+     *         if an error occur during the request.
+     */
     public String post(final String uri, final String content) throws RestClientException {
         return post(uri, content, STATUS_OK);
     }
 
-    public String post(final String uri, final String content, final int status) throws RestClientException {
+    /**
+     * Execute a HTTP POST request to the given uri with the expected status code.
+     *
+     * @param uri
+     *         the target uri.
+     * @param content
+     *         the request's content
+     * @param statusCode
+     *         the expected response status code.
+     *
+     * @return the response message.
+     *
+     * @throws RestClientException
+     *         if an error occur during the request.
+     */
+    public String post(final String uri, final String content, final int statusCode) throws RestClientException {
         HttpPost request = new HttpPost(uri);
         request.addHeader(HttpHeaders.CONTENT_TYPE, "application/json");
         request.setEntity(new StringEntity(content, Consts.UTF_8));
 
-        return sendRequests(request, status);
+        return sendRequests(request, statusCode);
     }
 
+    /**
+     * Execute a HTTP PUT request to the given uri.
+     *
+     * @param uri
+     *         the target uri.
+     *
+     * @return the response message.
+     *
+     * @throws RestClientException
+     *         if an error occur during the request.
+     */
     public String put(final String uri) throws RestClientException {
         return put(uri, STATUS_OK);
     }
 
-    public String put(final String uri, final int status) throws RestClientException {
+    /**
+     * Execute a HTTP PUT request to the given uri with the expected status code.
+     *
+     * @param uri
+     *         the target uri.
+     * @param statusCode
+     *         the expected response status code.
+     *
+     * @return the response message.
+     *
+     * @throws RestClientException
+     *         if an error occur during the request.
+     */
+    public String put(final String uri, final int statusCode) throws RestClientException {
         HttpPut request = new HttpPut(uri);
-        return sendRequests(request, status);
+        return sendRequests(request, statusCode);
     }
 
+    /**
+     * Execute a HTTP DELETE request to the given uri.
+     *
+     * @param uri
+     *         the target uri.
+     *
+     * @return the response message.
+     *
+     * @throws RestClientException
+     *         if an error occur during the request.
+     */
     public String delete(final String uri) throws RestClientException {
         return delete(uri, STATUS_OK);
     }
 
-    public String delete(final String uri, final int status) throws RestClientException {
+    /**
+     * Execute a HTTP DELETE request to the given uri with the expected status code.
+     *
+     * @param uri
+     *         the target uri.
+     * @param statusCode
+     *         the expected response status code.
+     *
+     * @return the response message.
+     *
+     * @throws RestClientException
+     *         if an error occur during the request.
+     */
+    public String delete(final String uri, final int statusCode) throws RestClientException {
         HttpDelete request = new HttpDelete(uri);
-        return sendRequests(request, status);
+        return sendRequests(request, statusCode);
     }
 
-    private String sendRequests(HttpUriRequest request, int httpStatus) throws RestClientException {
+    private String sendRequests(HttpUriRequest request, int statusCode) throws RestClientException {
         log.debug("Sending %s request to %s", request.getMethod(), request.getURI());
         HttpResponse response;
         try {
@@ -172,7 +319,7 @@ public class RestClient {
             log.error(message, e);
             throw new RequestFailedException(message, e);
         }
-        if (response.getStatusLine().getStatusCode() != httpStatus) {
+        if (response.getStatusLine().getStatusCode() != statusCode) {
             String message = String.format("The response status code %s is not matching with the expected %s!", response.getStatusLine().getStatusCode(), host);
             log.warn(message);
             throw new ResponseCodeNotMatchingException(message);

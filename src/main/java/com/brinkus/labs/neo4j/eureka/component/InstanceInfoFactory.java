@@ -31,6 +31,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
+/**
+ * Eureka instance information creator.
+ */
 public class InstanceInfoFactory {
 
     private final Log log = FormattedLog.toOutputStream(System.out);
@@ -42,18 +45,45 @@ public class InstanceInfoFactory {
         // default
     }
 
+    /**
+     * Create a new instance of the {@link InstanceInfoFactory}.
+     *
+     * @return a new  {@link InstanceInfoFactory} instance.
+     */
     public static InstanceInfoFactory getFactory() {
         return new InstanceInfoFactory();
     }
 
-    public InstanceInfo createDefault(
+    /**
+     * Create a new {@link InstanceInfo} object.
+     *
+     * @param registration
+     *         the registration information.
+     * @param amazonInfo
+     *         the AWS information instance.
+     *
+     * @return the {@link InstanceInfo} object.
+     */
+    public InstanceInfo create(
             final Registration registration,
             final AmazonInfo amazonInfo
     ) {
-        return createDefault(registration, amazonInfo, InstanceInfo.InstanceStatus.STARTING);
+        return create(registration, amazonInfo, InstanceInfo.InstanceStatus.STARTING);
     }
 
-    public InstanceInfo createDefault(
+    /**
+     * Create a new {@link InstanceInfo} object with the given status.
+     *
+     * @param registration
+     *         the registration information.
+     * @param amazonInfo
+     *         the AWS information instance.
+     * @param status
+     *         the registered instance's status.
+     *
+     * @return the {@link InstanceInfo} object.
+     */
+    public InstanceInfo create(
             final Registration registration,
             final AmazonInfo amazonInfo,
             final InstanceInfo.InstanceStatus status

@@ -51,32 +51,72 @@ public class LifecycleService {
 
         private ObjectMapper mapper;
 
+        /**
+         * Builder to create a new {@link LifecycleService} instance.
+         */
         public Builder() {
-            mapper = new ObjectMapper();
-            mapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
-            mapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
+            withMapper(new ObjectMapper());
         }
 
+        /**
+         * Set the registration information.
+         *
+         * @param registration
+         *         the registration information.
+         *
+         * @return the builder instance.
+         */
         public Builder withRegistration(final Registration registration) {
             this.registration = registration;
             return this;
         }
 
+        /**
+         * Set the REST client.
+         *
+         * @param restClient
+         *         the REST client instance.
+         *
+         * @return the builder instance.
+         */
         public Builder withRestClient(final RestClient restClient) {
             this.restClient = restClient;
             return this;
         }
 
+        /**
+         * Set the AWS information instance.
+         *
+         * @param amazonInfo
+         *         the AWS information instance.
+         *
+         * @return the builder instance.
+         */
         public Builder withAwsInfo(final AmazonInfo amazonInfo) {
             this.awsInfo = amazonInfo;
             return this;
         }
 
+        /**
+         * Set the JSON object mapper.
+         *
+         * @param mapper
+         *         the JSON object mapper.
+         *
+         * @return the builder instance.
+         */
         public Builder withMapper(final ObjectMapper mapper) {
             this.mapper = mapper;
+            this.mapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+            this.mapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
             return this;
         }
 
+        /**
+         * Create a new instance of the {@link LifecycleService}.
+         *
+         * @return the lifecycle service instance.
+         */
         public LifecycleService build() {
             return new LifecycleService(registration, restClient, awsInfo, mapper);
         }
@@ -132,7 +172,10 @@ public class LifecycleService {
      *         an error occurred during the HTTP communication
      */
     public void register() throws EurekaPluginException {
-        log.info("Registering application instance (%s)", restClient.getHost());
+        log.info("Sending %s registration request from %s to %s",
+                 registration.getName(),
+                 registration.getHostname(),
+                 restClient.getHost());
 
         // create a new instance info before every registration
         createInstanceInfo();
@@ -159,7 +202,10 @@ public class LifecycleService {
      *         an error occurred during the HTTP communication
      */
     public void keepAlive() throws EurekaPluginException {
-        log.debug("Keeping application status alive (%s)", restClient.getHost());
+        log.debug("Sending %s status alive request from %s to %s",
+                  registration.getName(),
+                  registration.getHostname(),
+                  restClient.getHost());
         if (instanceInfo == null) {
             throw new InvalidLifeCycleException("Instance info instance does not exist!");
         }
@@ -177,7 +223,10 @@ public class LifecycleService {
      *         an error occurred during the HTTP communication
      */
     public void deregister() throws EurekaPluginException {
-        log.info("De-registering application instance (%s)", restClient.getHost());
+        log.info("Sending %s de-registration request from %s to %s",
+                 registration.getName(),
+                 registration.getHostname(),
+                 restClient.getHost());
         if (instanceInfo == null) {
             throw new InvalidLifeCycleException("Instance info instance does not exist!");
         }
@@ -204,11 +253,11 @@ public class LifecycleService {
      */
     InstanceInfo createInstanceInfo() {
         instanceInfo = InstanceInfoFactory.getFactory()
-                .createDefault(registration, amazonInfo, InstanceInfo.InstanceStatus.UP);
+                .create(registration, amazonInfo, InstanceInfo.InstanceStatus.UP);
         return instanceInfo;
     }
 
-    private void updateStatus(LifecycleStatus status) {
+    private void updateStatus(final LifecycleStatus status) {
         if (this.status == status) {
             return;
         }
