@@ -1,7 +1,7 @@
 # List of the service discovery servers host and port information
 services:
   -
-    host: 127.0.0.1
+    host: 127
     port: 18761
 
 # Registration information used in discovery service
@@ -16,7 +16,7 @@ registration:
   ipAddress: 127.0.0.1
   # With AWS use the DNS resolvation name
   awsDnsHostname: true
-  # The unsecure port
+  # The unsecured port
   port:
     port: 7474
     enabled: true

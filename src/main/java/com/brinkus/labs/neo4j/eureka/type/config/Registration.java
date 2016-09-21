@@ -49,7 +49,7 @@ public class Registration {
     private String vipAddress;
 
     /**
-     * The instance's insecure port.
+     * The instance's unsecured port.
      */
     private RegistrationPort port;
 
@@ -169,19 +169,19 @@ public class Registration {
     }
 
     /**
-     * Get the instance's insecure port.
+     * Get the instance's unsecured port.
      *
-     * @return the insecure port.
+     * @return the unsecured port.
      */
     public RegistrationPort getPort() {
         return port;
     }
 
     /**
-     * Set the instance's insecure port.
+     * Set the instance's unsecured port.
      *
      * @param port
-     *         the insecure port.
+     *         the unsecured port.
      */
     public void setPort(final RegistrationPort port) {
         this.port = port;
