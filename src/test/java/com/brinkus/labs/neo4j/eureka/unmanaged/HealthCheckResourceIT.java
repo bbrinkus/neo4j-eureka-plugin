@@ -22,7 +22,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.neo4j.harness.ServerControls;
 import org.neo4j.harness.TestServerBuilders;
-import org.neo4j.test.SuppressOutput;
+import org.neo4j.test.rule.SuppressOutput;
 import org.neo4j.test.server.HTTP;
 
 import static org.hamcrest.CoreMatchers.is;

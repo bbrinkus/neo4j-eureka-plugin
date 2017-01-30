@@ -1,5 +1,15 @@
 # Neo4j Eureka Plugin
 
+## Versions
+
+* 1.1.0 
+    * Upgrade to labs-parent 1.2.0
+    * Upgrade to neo4j 3.1.0
+* 1.0.1
+    * Replace jackson to xstream
+* 1.0.0 
+    * Baseline
+
 ## Neo4j Configuration
 
 ### Neo4j (3.0+)

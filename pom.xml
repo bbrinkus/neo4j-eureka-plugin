@@ -7,12 +7,12 @@
     <parent>
         <groupId>com.brinkus.labs</groupId>
         <artifactId>labs-parent</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
     </parent>
 
     <groupId>com.brinkus.labs</groupId>
     <artifactId>neo4j-eureka-plugin</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>neo4j-eureka-plugin</name>
@@ -69,7 +69,7 @@
         <junit.version>4.12</junit.version>
         <lang3.version>3.3.2</lang3.version>
         <mockito.version>1.10.19</mockito.version>
-        <neo4j.version>3.0.4</neo4j.version>
+        <neo4j.version>3.1.0</neo4j.version>
         <slf4j.version>1.7.21</slf4j.version>
         <xstream.version>1.4.8</xstream.version>
         <yamlbeans.version>1.09</yamlbeans.version>
@@ -100,7 +100,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>neo4j-eureka</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>

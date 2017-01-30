@@ -24,6 +24,6 @@ registration:
   securePort:
     port: 7473
     enabled: false
-  statusPageUrl: http://localhost:7474/browser
-  healthCheckUrl: http://localhost:7474/eureka/health
-  homePageUrl: http://localhost:7474/
+  statusPageUrl: http://127.0.0.1:7474/browser
+  healthCheckUrl: http://127.0.0.1:7474/eureka/health
+  homePageUrl: http://127.0.0.1:7474/

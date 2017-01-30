@@ -18,9 +18,12 @@
 
 package com.brinkus.labs.neo4j.eureka.type.health;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Health check information.
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public final class HealthCheck {
 
     /**
